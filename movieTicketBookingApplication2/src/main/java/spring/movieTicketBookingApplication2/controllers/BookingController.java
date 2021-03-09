@@ -7,6 +7,8 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import spring.movieTicketBookingApplication2.entities.TicketBooking;
@@ -28,13 +31,13 @@ public class BookingController {
 	IBookingRepository bookingRepository;
 	
 	@PostMapping("/bookings")
-	public ResponseEntity<Void> addBooking(@RequestBody TicketBooking booking){
-		ResponseEntity<Void> re;
+	public ResponseEntity<TicketBooking> addBooking(@RequestBody TicketBooking booking){
+		ResponseEntity<TicketBooking> re;
 				
 		TicketBooking tkt1 = bookingRepository.findByTicketId(booking.getTicketId());
 		if(tkt1 == null) {
 		bookingRepository.save(booking);
-		re = new ResponseEntity<>(HttpStatus.CREATED);
+		re = new ResponseEntity<>(booking, HttpStatus.CREATED);
 		}
 		else {
 		re = new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -51,14 +54,28 @@ public class BookingController {
 	}
 	
 	@GetMapping("/bookings/{date}")
-	public TicketBooking findByLocalDate(@PathVariable LocalDate date) {
+//	LocalDate date = LocalDate.parse("2021-03-10");
+	public TicketBooking findByLocalDate(@PathVariable ("date") LocalDate date) {
 		return bookingRepository.findByBookingDate(date);
 	}
 	
-	@GetMapping("/bookings/{ticketId}")
-	public TicketBooking findByticketId(@PathVariable int ticketId) {
-		return bookingRepository.findByTicketId(ticketId);
+	
+	@GetMapping("/bookings/{id}")
+	public ResponseEntity<TicketBooking> findByticketId(@PathVariable("id") int id) {
+		ResponseEntity<TicketBooking> responseEntity = null;
+		
+		Optional<TicketBooking> ticketBooking = Optional.of(bookingRepository.findByTicketId(id));
+		TicketBooking booking =null;
+		if(ticketBooking.isPresent()) {
+			booking = ticketBooking.get();
+			responseEntity = new ResponseEntity<>(HttpStatus.OK);
+		}
+		else {
+			responseEntity = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return responseEntity;
 	}
+	
 	
 	@GetMapping("/bookings/{transactionId};{ticketId}")
 	public List<TicketBooking> findBytransactionIdAndticketId(@PathVariable int transactionId, @PathVariable int ticketId) {
@@ -70,8 +87,9 @@ public class BookingController {
 	@Transactional
 	public ResponseEntity<Void> updateTicketBooking(@RequestBody TicketBooking booking){
 		ResponseEntity<Void> re;
-		TicketBooking bkng = bookingRepository.findByTicketId(booking.getShowId());
-		bkng.setTransactionStatus(booking.getTransactionStatus());
+		
+		TicketBooking ticket = bookingRepository.findByTicketId(booking.getTicketId());
+		ticket.setTransactionStatus(booking.getTransactionStatus());
 		re = new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		return re;
 	}

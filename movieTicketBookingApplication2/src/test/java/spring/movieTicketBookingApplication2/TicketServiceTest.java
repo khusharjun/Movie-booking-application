@@ -2,6 +2,8 @@ package spring.movieTicketBookingApplication2;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +19,7 @@ class TicketServiceTest {
 
 //	@Test
 	void testAddTicket() {
-		Ticket ticket = new Ticket(3, null, null, false);
+		Ticket ticket = new Ticket(2, null, null, true);
 		ticketServiceImplementaion.addTicket(ticket);
 		System.out.println("Check postgre");
 	}
@@ -36,11 +38,16 @@ class TicketServiceTest {
 		System.out.println(ticket);
 	}
 	
-	@Test 
+//	@Test 
 	void testCancelTicket(){
 		int id = 4;
 		ticketServiceImplementaion.cancelTicket(id);
 		System.out.println("Check PostgreSQL");
 	}
 
+//	@Test
+	void testViewTicketList() {
+		List<Ticket> viewAll = ticketServiceImplementaion.viewTicketList();
+		System.out.println(viewAll);
+	}
 }

@@ -34,6 +34,17 @@ public class Ticket {
 		this.bookingRef = bookingRef;		
 	}
 
+	
+	public Ticket(int ticketId, int noOfSeats, List<Seat> seats, TicketBooking bookingRef, boolean ticketStatus) {
+		super();
+		this.ticketId = ticketId;
+		this.noOfSeats = noOfSeats;
+		Seats = seats;
+		this.bookingRef = bookingRef;
+		this.ticketStatus = ticketStatus;
+	}
+
+
 	public int getTicketId() {
 		return ticketId;
 	}

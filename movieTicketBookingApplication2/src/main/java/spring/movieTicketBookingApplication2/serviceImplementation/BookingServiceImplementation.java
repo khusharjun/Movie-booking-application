@@ -1,10 +1,13 @@
 package spring.movieTicketBookingApplication2.serviceImplementation;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import spring.movieTicketBookingApplication2.entities.TicketBooking;
@@ -41,12 +44,27 @@ public class BookingServiceImplementation {
 			if(booking.getBookingDate()!=null) {
 				updateBooking.setBookingDate(booking.getBookingDate());
 			}
+			if(booking.getShowId()!= 0) {
+				updateBooking.setShowId(booking.getShowId());
+			}
+			if(booking.getTotalCost()!=0) {
+				updateBooking.setTotalCost(booking.getTotalCost());
+			}
+			if(booking.getTransactionId()!=0) {
+				updateBooking.setTransactionId(booking.getTransactionId());
+			}
+			if(booking.getTransactionMode()!=null) {
+				updateBooking.setTransactionMode(booking.getTransactionMode());
+			}
+			if(booking.getTransactionStatus()!=null) {
+				updateBooking.setTransactionStatus(booking.getTransactionStatus());
+			}
 			}
 		return updateBooking;
 		}
 		
-	public TicketBooking cancelBooking(TicketBooking booking) {
-		Optional<TicketBooking> findCancelBooking = bookingRepository.findById(booking.getTicketId());
+	public TicketBooking cancelBooking(int id) {
+		Optional<TicketBooking> findCancelBooking = bookingRepository.findById(id);
 		TicketBooking cancelBooking = null;
 		if(findCancelBooking.isPresent()) {
 			cancelBooking = findCancelBooking.get();
@@ -55,19 +73,26 @@ public class BookingServiceImplementation {
 		return cancelBooking;
 	}
 	
-//	public List<TicketBooking> showAllBooking(LocalDate date) {
-//		Optional<TicketBooking> findCancelBooking = bookingRepository.findById(date);
+	LocalDate date = LocalDate.parse("2021-03-09");
+	public List<TicketBooking> showAllBooking(LocalDate date) {
+		List<TicketBooking> allBookings = bookingRepository.findAll();
+		return allBookings;
+	}
+	
+		
+	public TicketBooking showAllBookingList(int showId) {
+		List<TicketBooking> findBookings = bookingRepository.findAll();
+		return findBookings.get(showId);
+	}
+	
+//	public List<TicketBooking> showAllBooking(int movieId) {
+//		List<TicketBooking> findBooking = bookingRepository.findByMovieId(movieId);
+//		return findBooking;
 //	}
 	
-	public TicketBooking showAllBookingList(int showId) {
-		Optional<TicketBooking> findCancelBooking = bookingRepository.findById(showId);
-		return findCancelBooking.get();
-	}
+//			To find the total cost of the tickets................
+//	public TicketBooking calculateTotalCost(double 
 	
-	public TicketBooking showAllBooking(int movieId) {
-		Optional <TicketBooking> findCancelBooking = bookingRepository.findById(movieId);
-		return findCancelBooking.get();
-	}
 	
-//	public TicketBooking
+	
 }

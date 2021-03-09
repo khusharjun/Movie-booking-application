@@ -27,13 +27,13 @@ public class SeatController {
 	ISeatRepository seatRepository;
 	
 	@PostMapping("/seats")
-	public ResponseEntity<Void> addSeat(@RequestBody Seat seatId){
-		ResponseEntity<Void> re;
+	public ResponseEntity<Seat> addSeat(@RequestBody Seat seat){
+		ResponseEntity<Seat> re;
 				
-		Seat s = seatRepository.findBySeatId(seatId.getSeatId());
+		Seat s = seatRepository.findBySeatId(seat.getSeatId());
 		if(s == null) {
-		seatRepository.save(seatId);
-		re = new ResponseEntity<>(HttpStatus.CREATED);
+		seatRepository.save(seat);
+		re = new ResponseEntity<>(seat,HttpStatus.CREATED);
 		}
 		else {
 		re = new ResponseEntity<>(HttpStatus.CONFLICT);

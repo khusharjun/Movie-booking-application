@@ -22,7 +22,7 @@ class SeatServiceTest {
 		System.out.println("Done");
 	}
 	
-	@Test
+//	@Test
 	void testUpdateSeat() {
 		Seat seat = new Seat(2,"S50",null , 0);
 		seatServiceImplementaion.updateSeat(seat);

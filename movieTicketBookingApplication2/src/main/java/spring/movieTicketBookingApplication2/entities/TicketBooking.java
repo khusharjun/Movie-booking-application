@@ -38,6 +38,21 @@ public class TicketBooking {
 		this.ticket = ticket;
 	}
 	
+	
+	public TicketBooking(int ticketId, int showId, LocalDate bookingDate, int transactionId, String transactionMode,
+			String transactionStatus, double totalCost, Ticket ticket) {
+		super();
+		this.ticketId = ticketId;
+		this.showId = showId;
+		this.bookingDate = bookingDate;
+		this.transactionId = transactionId;
+		this.transactionMode = transactionMode;
+		this.transactionStatus = transactionStatus;
+		this.totalCost = totalCost;
+		this.ticket = ticket;
+	}
+
+
 	public TicketBooking() {
 		
 	}
