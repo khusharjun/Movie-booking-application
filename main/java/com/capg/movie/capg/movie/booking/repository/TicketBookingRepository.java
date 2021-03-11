@@ -18,7 +18,8 @@ public interface TicketBookingRepository extends JpaRepository<TicketBooking, In
 
 	public TicketBooking findByTransactionIdAndTransactionStatus(int transactionId, String transactionStatus);
 	
-	public List<TicketBooking> findByBookingDate(Date from);
+//	public List<TicketBooking> findByBookingDate(Date from);
+	
 	public List<TicketBooking> findByBookingDate(LocalDate bookingDate);
 	public List<TicketBooking> findByShowId(int showId);
 }

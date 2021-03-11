@@ -2,7 +2,6 @@ package com.capg.movie.capg.movie.booking.servicesImplementation;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.capg.movie.capg.movie.booking.entities.Seat;
 import com.capg.movie.capg.movie.booking.entities.Show;
 import com.capg.movie.capg.movie.booking.entities.TicketBooking;
 import com.capg.movie.capg.movie.booking.repository.SeatRepository;
@@ -36,10 +36,19 @@ public TicketBooking addBooking(TicketBooking ticketBooking) {
 	
 //		ticketBookingRepository.save(ticketBooking);
 //		return ticketBooking;
+	 	ticketBooking.setBookingDate(LocalDate.now());
 		Optional<TicketBooking> getTicketBooking = ticketBookingRepository.findById(ticketBooking.getTicketId());
 		if(getTicketBooking.isEmpty()) {
-			ticketBookingRepository.save(ticketBooking);
-			return ticketBooking;
+			ticketBooking.setTransactionStatus("Confirmed");
+			ticketBooking.setTransactionMode("Online");
+			List<Seat>seats = ticketBooking.getTicket().getSeats();
+			double cost =0;
+			for(Seat s: seats) {
+				cost = cost + s.getPrice();
+			}
+			ticketBooking.setTotalCost(cost);
+			return ticketBookingRepository.save(ticketBooking);
+			
 		}
 		return null;
 	}
@@ -145,12 +154,6 @@ public TicketBooking showAllBookingList(int ticketId) {
 	return allBookings;
 }
 
-
-
-public List<TicketBooking> showAllBooking(Date from) {
-	List<TicketBooking> allBookings = ticketBookingRepository.findByBookingDate(from);
-	return allBookings;
 }
 
 
-}

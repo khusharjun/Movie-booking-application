@@ -41,8 +41,11 @@ public class TicketBookingController {
 				
 		Optional<TicketBooking> ticket = ticketBookingRepository.findById(booking.getTicketId());
 		if(ticket.isEmpty()) {
-			
+		System.out.println("booking" + booking);	
 		ticketBookingServiceImplementation.addBooking(booking);
+
+		System.out.println("booking date "+booking.getBookingDate());
+		System.out.println("trnsa id "+booking.getTransactionId());
 		re = new ResponseEntity<>(booking, HttpStatus.CREATED);
 		}
 		else {
@@ -86,13 +89,15 @@ public class TicketBookingController {
 
 	@GetMapping("/bookingsByDate/{date}")
 	public ResponseEntity<List<TicketBooking>> viewBookingByDate(@PathVariable("date") 
-    @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate  date) {
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate  date) {
+		System.out.println(date);
+		ResponseEntity<List<TicketBooking>> re;
 		List<TicketBooking> bookings = ticketBookingServiceImplementation.showAllBookingByDate(date);
-		return new ResponseEntity<>(bookings,HttpStatus.OK);
+		return  re =  new ResponseEntity<>(bookings,HttpStatus.OK);
 	}
 	
 	@GetMapping("/M/{movieId}")
-//	LocalDate date = LocalDate.parse("2021-03-10");
+
 	public ResponseEntity<List<TicketBooking>> findByMovieId(@PathVariable ("movieId") int movieId) {
 		ResponseEntity<List<TicketBooking>> re;
 		List<TicketBooking>ticketBookings=ticketBookingServiceImplementation.showAllBooking(movieId);
@@ -105,8 +110,22 @@ public class TicketBookingController {
 		return re;
 	}
 	
+	@GetMapping("/{ticketId}")
+
+	public ResponseEntity<List<TicketBooking>> findByTicketId(@PathVariable ("ticketId") int ticketId) {
+		ResponseEntity<List<TicketBooking>> re;
+		List<TicketBooking>ticketBookings=ticketBookingServiceImplementation.showAllBooking(ticketId);
+		if(ticketBookings.isEmpty()) {
+			throw new BookingNotExistsException("Bookings Not Exist "+ticketId);
+		}
+		else {
+			re=new ResponseEntity<List<TicketBooking>>(ticketBookings,HttpStatus.OK);
+		}
+		return re;
+	}
+	
 	@GetMapping("/S/{showId}")
-//	LocalDate date = LocalDate.parse("2021-03-10");
+
 	public ResponseEntity<List<TicketBooking>> findByShowId(@PathVariable ("showId") int showId) {
 		ResponseEntity<List<TicketBooking>> re;
 		List<TicketBooking>ticketBookings=ticketBookingServiceImplementation.showBookingList(showId);

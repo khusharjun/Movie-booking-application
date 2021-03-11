@@ -35,7 +35,7 @@ class TicketBookingServiceTest {
 //	@Test
 	void testShowAllBooking() {
 		LocalDate date = LocalDate.parse("2021-03-10");
-		List<TicketBooking> ticketBooking = bookingServiceImplementation.showAllBooking(date);
+		List<TicketBooking> ticketBooking = bookingServiceImplementation.showAllBookingByDate(date);
 		System.out.println(ticketBooking);
 	}
 	

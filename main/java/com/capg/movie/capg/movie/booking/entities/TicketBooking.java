@@ -1,6 +1,7 @@
 package com.capg.movie.capg.movie.booking.entities;
 
 import java.time.LocalDate;
+import java.util.Random;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,8 +17,12 @@ public class TicketBooking {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int ticketId;
 	int showId;
+	
 	LocalDate bookingDate;
-	int transactionId;
+
+	Random rnd = new Random();
+    int transactionId = rnd.nextInt(999999);
+	
 	String transactionMode;
 	String transactionStatus;
 	double totalCost;
@@ -30,16 +35,11 @@ public class TicketBooking {
 	}
 	
 
-	public TicketBooking(int showId, LocalDate bookingDate, int transactionId, String transactionMode,
-			String transactionStatus,  Ticket ticket) {
-		this.bookingDate = bookingDate;
+	public TicketBooking(int showId, Ticket ticket) {
+		this.bookingDate = LocalDate.now();
 		this.showId = showId;
 		this.ticket = ticket;
 		this.totalCost = this.ticket.getNoOfSeats()*150;
-		this.transactionId = transactionId;
-		this.transactionMode = transactionMode;
-		this.transactionStatus = transactionStatus;
-	
 		this.ticket = ticket;
 	}
 
@@ -50,7 +50,7 @@ public class TicketBooking {
 		super();
 		this.ticketId = ticketId;
 		this.showId = showId;
-		this.bookingDate = bookingDate;
+		this.bookingDate = LocalDate.now();
 		this.transactionId = transactionId;
 		this.transactionMode = transactionMode;
 		this.transactionStatus = transactionStatus;
@@ -63,7 +63,7 @@ public class TicketBooking {
 			String transactionStatus, double totalCost, Ticket ticket) {
 		super();
 		this.showId = showId;
-		this.bookingDate = bookingDate;
+		this.bookingDate = LocalDate.now();
 		this.transactionId = transactionId;
 		this.transactionMode = transactionMode;
 		this.transactionStatus = transactionStatus;
@@ -89,7 +89,7 @@ public class TicketBooking {
 	}
 
 	public LocalDate getBookingDate() {
-		return bookingDate;
+		return this.bookingDate;
 	}
 
 	public void setBookingDate(LocalDate bookingDate) {
